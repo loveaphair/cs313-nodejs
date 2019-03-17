@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- <title>Gourmet Escape<?=isset($_GET['pgt']) ? ' -'.implode(' ', preg_split('/(?=[A-Z])/',$_GET['pgt'])) : '';?></title> -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <!-- <script src="js/sumoselect.min.js"></script> -->
+        <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+        <link href="css/styles.css?v=1.0.06" rel="stylesheet" type="text/css">
+        <link href="css/sumoselect.min.css?v=1.0.01" rel="stylesheet" type="text/css"> -->
+    </head>
+<body>
+  <style>
+    #news_output{
+      list-style-type: none;
+    }
+    #news_output li{
+      margin-bottom:20px;
+    }
+  </style>
+  <script>
+    $(function(){
+      $('.news-picker').click(function(){
+        source = $(this).data('id');
+        $.get('/sources', {'source' : source}, function(data){
+          $('#news_output').empty();
+          getArticles(data.articles);
+        });
+      });
+
+      function getArticles(data){
+        var data = data ? data : <%- JSON.stringify(data.articles) %>;
+        data.forEach(function(value){
+          // console.log(value);
+          $('#news_output').append("<li><img src='" + value.urlToImage + "' width='200px'><br>" + value.source.name + ":<a href='" + value.url + "' target='_blank' title='" + value.title + "'>" + value.title + "</a><br><i>" + value.description + "</i></li>");
+        });
+    }
+
+    getArticles();
+    });
+    </script>
+
+    Select News Source: 
+    <a href="javascript:void(0);" class="news-picker" data-id="cnn">CNN</a> 
+    <a href="javascript:void(0);" class="news-picker"  data-id="bbc-news">BBC</a> 
+    <a href="javascript:void(0);" class="news-picker" data-id="the-verge">The Verge</a>
+    <a href="javascript:void(0);" class="news-picker" data-id="ign">IGN</a>
+	<ul id="news_output">
+    
+  </ul>
+</body>
+</html>
