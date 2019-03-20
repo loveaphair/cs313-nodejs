@@ -11,18 +11,12 @@ newsapi.v2.topHeadlines({
 	  });
 
 module.exports = {
-	selectSource: function (res, source){
+	searchNews: function (res, query, source){
 		newsapi.v2.topHeadlines({
 			sources: source,
-			language: 'en',
-		}).then(response => {
-			res.send(response);
-		});
-	},
-	searchNews: function (res, query){
-		newsapi.v2.topHeadlines({
 			q: query,
 			language: 'en',
+			sortBy: 'relevance'
 		}).then(response => {
 			res.send(response);
 		});

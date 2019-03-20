@@ -4,59 +4,46 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- <title>Gourmet Escape<?=isset($_GET['pgt']) ? ' -'.implode(' ', preg_split('/(?=[A-Z])/',$_GET['pgt'])) : '';?></title> -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <!-- <script src="js/sumoselect.min.js"></script> -->
-        <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
-        <link href="css/styles.css?v=1.0.06" rel="stylesheet" type="text/css">
-        <link href="css/sumoselect.min.css?v=1.0.01" rel="stylesheet" type="text/css"> -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="/stylesheets/main.css" />
+        <script src="/javascripts/sumoselect.min.js"></script>
+        <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous"> -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous"> -->
+        <!-- <link href="css/styles.css?v=1.0.06" rel="stylesheet" type="text/css"> -->
+        <link href="/stylesheets/sumoselect.min.css?v=1.0.01" rel="stylesheet" type="text/css">
     </head>
 <body>
-  <style>
-    #news_output{
-      list-style-type: none;
-    }
-    #news_output li{
-      margin-bottom:20px;
-    }
-  </style>
   <script>
 	  var articleData = [];
     $(function(){
-		$('.news-picker').click(function(){
-			var source = $(this).data('id');
-			$.get('/sources', {'source' : source}, function(data){
-				$('#news_output').empty();
-				getArticles(data.articles);
-			});
-		});
-
 		$('#newsSearch').submit(function(){
 			event.preventDefault();
-			var queryVal = $("#query").val();
-			if(!queryVal)
+			var selectedSources = $(".newsSourceSelect option:selected").map(function(){return this.value}).get().join(', ');
+			var queryVal = $("#query").val().replace(/(<([^>]+)>)/ig,"").replace(/[_\W]+/g, "");
+			if(!selectedSources)
 				return false;
-			$.get('/query', {'q' : queryVal}, function(data){
-				$('#news_output').empty();
-				getArticles(data.articles);
+			$.get('/query', {'q' : queryVal, 'sources': selectedSources}, function(data){
+				if(data.status === 'ok'){
+					$('#news_output').empty();
+					getArticles(data.articles);
+				}
 			});
 		});
 
       function getArticles(data){
 		var data = data ? data : <%- JSON.stringify(data.articles) %>;
-		var i = 1;
         data.forEach(function(value){
 			if(!value.urlToImage)
 				return true;
-			articleData[i] = value.content;
-          $('#news_output').append("<li><img src='" + value.urlToImage + "' width='200px'><br>" + value.source.name + ":<a href='javascript:void(0);' target='_blank' title='" + value.title + "' data-id='" + i + "' class='more-info-link'>" + value.title + "</a><br><i>" + value.description + "</i><span class='more-info-" + i + "'></span></li>");
-        //   $('#news_output').append("<li><img src='" + value.urlToImage + "' width='200px'><br>" + value.source.name + ":<a href='" + value.url + "' target='_blank' title='" + value.title + "'>" + value.title + "</a><br><i>" + value.description + "</i></li>");
-			i++;
+          $('#news_output').append("<li><a class='article-more-info' href='" + value.url + "' target='_blank'><div class='content-div'><img src='" + value.urlToImage + "'><br><span class='title'>" + value.source.name + "</span><br><div class='news-content'><span class='article-title'>" + value.title + "</span><br>" + value.description + "</div></div></a></li>");
 		});
 
-		$('.more-info-link').click(function(){
-			dataId = $(this).data('id');
-			$('.more-info-' + dataId).append(articleData[dataId]);
+		$('.sumoSelect').SumoSelect({
+			search: true,
+			placeholder: 'Select Source(s)...',
+			searchText: 'Type to Search...',
+			okCancelInMulti: true,
+			selectAll: true
 		});
 		
     }
@@ -66,17 +53,28 @@
 	</script>
 	
 	<form id="newsSearch">
-		<input style="height:32px;width:200px;font-size:14px;" type="text" name="query" id="query" placeholder="Search all news sources...">
+		<input class="form-field-text" type="text" name="query" id="query" placeholder="Search the news...">
+		<select class="sumoSelect newsSourceSelect" multiple="multiple">
+			<option name="source" value="associated-press">Associated Press</option>
+			<option name="source" value="bbc-news">BBC</option>
+			<option name="source" value="cnn">CNN</option>
+			<option name="source" value="espn">ESPN</option>
+			<option name="source" value="fortune">Fortune</option>
+			<option name="source" value="fox-news">Fox News</option>
+			<option name="source" value="google-news">Google News</option>
+			<option name="source" value="the-huffington-post">The Huffington Post</option>
+			<option name="source" value="the-verge">The Verge</option>
+			<option name="source" value="the-wall-street-journal">The Wall Street Journal</option>
+			<option name="source" value="the-washington-post">The Washington Post</option>
+			<option name="source" value="time">Time</option>
+			<option name="source" value="wired">Wired</option>
+		</select>
 		<input type="submit" value="Search">
 	</form>
 
-    Select News Source: 
-    <a href="javascript:void(0);" class="news-picker" data-id="cnn">CNN</a> 
-    <a href="javascript:void(0);" class="news-picker"  data-id="bbc-news">BBC</a> 
-    <a href="javascript:void(0);" class="news-picker" data-id="the-verge">The Verge</a>
-    <a href="javascript:void(0);" class="news-picker" data-id="ign">IGN</a>
 	<ul id="news_output">
     
   </ul>
+
 </body>
 </html>

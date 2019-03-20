@@ -29,13 +29,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.get('/cool', (req, res) => res.send(cool()))
-app.get('/sources', function(req, res){
-  var source = req.query.source;
-  headlines.selectSource(res, source)
-});
 app.get('/query', function(req, res){
   var query = req.query.q;
-  headlines.searchNews(res, query);
+  var sources = req.query.sources;
+  headlines.searchNews(res, query, sources);
 });
 
 // catch 404 and forward to error handler
