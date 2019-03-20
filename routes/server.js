@@ -18,10 +18,13 @@ module.exports = {
 		}).then(response => {
 			res.send(response);
 		});
+	},
+	searchNews: function (res, query){
+		newsapi.v2.topHeadlines({
+			q: query,
+			language: 'en',
+		}).then(response => {
+			res.send(response);
+		});
 	}
 }
-
-
-// function processHeadlines(data){
-// 	return JSON.stringify(data.totalResults);
-// }

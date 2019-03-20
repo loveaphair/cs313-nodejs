@@ -21,26 +21,54 @@
     }
   </style>
   <script>
+	  var articleData = [];
     $(function(){
-      $('.news-picker').click(function(){
-        source = $(this).data('id');
-        $.get('/sources', {'source' : source}, function(data){
-          $('#news_output').empty();
-          getArticles(data.articles);
-        });
-      });
+		$('.news-picker').click(function(){
+			var source = $(this).data('id');
+			$.get('/sources', {'source' : source}, function(data){
+				$('#news_output').empty();
+				getArticles(data.articles);
+			});
+		});
+
+		$('#newsSearch').submit(function(){
+			event.preventDefault();
+			var queryVal = $("#query").val();
+			if(!queryVal)
+				return false;
+			$.get('/query', {'q' : queryVal}, function(data){
+				$('#news_output').empty();
+				getArticles(data.articles);
+			});
+		});
 
       function getArticles(data){
-        var data = data ? data : <%- JSON.stringify(data.articles) %>;
+		var data = data ? data : <%- JSON.stringify(data.articles) %>;
+		var i = 1;
         data.forEach(function(value){
-          // console.log(value);
-          $('#news_output').append("<li><img src='" + value.urlToImage + "' width='200px'><br>" + value.source.name + ":<a href='" + value.url + "' target='_blank' title='" + value.title + "'>" + value.title + "</a><br><i>" + value.description + "</i></li>");
-        });
+			if(!value.urlToImage)
+				return true;
+			articleData[i] = value.content;
+          $('#news_output').append("<li><img src='" + value.urlToImage + "' width='200px'><br>" + value.source.name + ":<a href='javascript:void(0);' target='_blank' title='" + value.title + "' data-id='" + i + "' class='more-info-link'>" + value.title + "</a><br><i>" + value.description + "</i><span class='more-info-" + i + "'></span></li>");
+        //   $('#news_output').append("<li><img src='" + value.urlToImage + "' width='200px'><br>" + value.source.name + ":<a href='" + value.url + "' target='_blank' title='" + value.title + "'>" + value.title + "</a><br><i>" + value.description + "</i></li>");
+			i++;
+		});
+
+		$('.more-info-link').click(function(){
+			dataId = $(this).data('id');
+			$('.more-info-' + dataId).append(articleData[dataId]);
+		});
+		
     }
 
     getArticles();
     });
-    </script>
+	</script>
+	
+	<form id="newsSearch">
+		<input style="height:32px;width:200px;font-size:14px;" type="text" name="query" id="query" placeholder="Search all news sources...">
+		<input type="submit" value="Search">
+	</form>
 
     Select News Source: 
     <a href="javascript:void(0);" class="news-picker" data-id="cnn">CNN</a> 

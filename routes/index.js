@@ -4,7 +4,6 @@ var server = require('./server');
 
 router.post('../views/index.ejs', function(req, res){
   var data = req.data;
-  console.log(`Data ${data}`);
 })
 
 /* GET home page. */
