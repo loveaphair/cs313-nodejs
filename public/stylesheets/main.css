@@ -94,7 +94,7 @@ body{
   padding:5px 8px;
 }
 
-input[type=submit]{
+.searchFormSubmit{
   background-color:#4CAF50;
   border:none;
   color:#fff;
@@ -102,15 +102,17 @@ input[type=submit]{
   font-size:14px;
   text-decoration:none;
   vertical-align: top;
+  display:inline-block;
+  text-align:center;
 }
 
-input[type=submit]:active{
+.searchFormSubmit:active{
   background-color:#3e8e41;
   box-shadow: 0 1px #666;
   transform:translateY(1px);
 }
 
-input[type=submit]:focus{
+.searchFormSubmit:focus{
   outline:0;
 }
 
@@ -166,14 +168,21 @@ input[type=submit]:focus{
     width:100%;
   }
   .SumoSelect{
-    width:48% !important;
+    width:100% !important;
   }
   .form-field-text{
-    width:48%;
+    width:98.5%;
+    height:30px;
   }
-  input[type=submit]{
-    width: 99% !important;
+  .searchFormSubmit{
+    width: 91.5% !important;
     display:block;
     margin-top:2px;
+    padding:10px 15px;
+  }
+
+  .SumoSelect>.CaptionCont {
+    min-height: 24px;
+    line-height: 24px;
   }
 }

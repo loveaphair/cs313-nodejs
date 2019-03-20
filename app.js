@@ -34,6 +34,8 @@ app.get('/query', function(req, res){
   var sources = req.query.sources;
   headlines.searchNews(res, query, sources);
 });
+app.get('/favicon.ico', (req, res) => res.status(204));
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
