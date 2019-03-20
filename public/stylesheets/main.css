@@ -81,9 +81,9 @@ body{
 }
 
 .form-field-text{
-  height:24px;
-  width:200px;
-  font-size:14px;
+  height:50px;
+  width:40%;
+  font-size:18px;
   vertical-align: top;
 }
 
@@ -98,7 +98,7 @@ input[type=submit]{
   background-color:#4CAF50;
   border:none;
   color:#fff;
-  padding: 6.5px 32px;
+  padding: 19.5px 15px;
   font-size:14px;
   text-decoration:none;
   vertical-align: top;
@@ -116,6 +116,16 @@ input[type=submit]:focus{
 
 .SumoSelect {
   font-family:sans-serif;
+  width:40% !important;
+}
+
+.SumoSelect>.CaptionCont {
+  min-height: 44px;
+  line-height: 44px;
+}
+
+.SumoSelect.open .search-txt {
+  font-size:16px !important;
 }
 
 .more-info{
@@ -154,5 +164,16 @@ input[type=submit]:focus{
 @media only screen and (max-width:600px){
   .content-div{
     width:100%;
+  }
+  .SumoSelect{
+    width:48% !important;
+  }
+  .form-field-text{
+    width:48%;
+  }
+  input[type=submit]{
+    width: 99% !important;
+    display:block;
+    margin-top:2px;
   }
 }
