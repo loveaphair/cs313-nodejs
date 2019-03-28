@@ -25,7 +25,10 @@
 			$.get('/query', {'q' : queryVal, 'sources': selectedSources}, function(data){
 				if(data.status === 'ok'){
 					$('#news_output').empty();
-					getArticles(data.articles);
+					if(data.totalResults === 0)
+						$('#news_output').append('<h2 style="text-align:center;width:100%;">No articles found.</h2>');
+					else
+						getArticles(data.articles);
 				}
 			});
 		});
@@ -35,7 +38,7 @@
         data.forEach(function(value){
 			if(!value.urlToImage)
 				return true;
-          $('#news_output').append("<li><a class='article-more-info' href='" + value.url + "' target='_blank'><div class='content-div'><img src='" + value.urlToImage + "'><br><span class='title'>" + value.source.name + "</span><br><div class='news-content'><span class='article-title'>" + value.title + "</span><br>" + value.description + "</div></div></a></li>");
+          	$('#news_output').append("<li><a class='article-more-info' href='" + value.url + "' target='_blank'><div class='content-div'><img src='" + value.urlToImage + "'><br><span class='title'>" + value.source.name + "</span><br><div class='news-content'><span class='article-title'>" + value.title + "</span><br>" + value.description + "</div></div></a></li>");
 		});
 
 		$('.sumoSelect').SumoSelect({
@@ -72,10 +75,7 @@
 		</select>
 		<buttton onclick="javascript:void(0)" id="searchFormSubmit" class="searchFormSubmit">Search</buttton>
 	</form>
-
-	<ul id="news_output">
-    
-  </ul>
-
+	<a style='width:100%;text-align:right' href='https://newsapi.org' target='_blank'>Powered by News API</a>
+	<ul id="news_output"> </ul>
 </body>
 </html>
