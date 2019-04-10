@@ -3,13 +3,9 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!-- <title>Gourmet Escape<?=isset($_GET['pgt']) ? ' -'.implode(' ', preg_split('/(?=[A-Z])/',$_GET['pgt'])) : '';?></title> -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="/stylesheets/main.css?v=1.0.1" />
         <script src="/javascripts/sumoselect.min.js"></script>
-        <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous"> -->
-        <!-- <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous"> -->
-        <!-- <link href="css/styles.css?v=1.0.06" rel="stylesheet" type="text/css"> -->
         <link href="/stylesheets/sumoselect.min.css?v=1.0.01" rel="stylesheet" type="text/css">
     </head>
 <body>
@@ -38,44 +34,56 @@
         data.forEach(function(value){
 			if(!value.urlToImage)
 				return true;
-          	$('#news_output').append("<li><a class='article-more-info' href='" + value.url + "' target='_blank'><div class='content-div'><img src='" + value.urlToImage + "'><br><span class='title'>" + value.source.name + "</span><br><div class='news-content'><span class='article-title'>" + value.title + "</span><br>" + value.description + "</div></div></a></li>");
+          	$('#news_output').append("<li><a class='article-more-info' href='" + value.url + "' target='_blank'><div class='content-div'><img src='" + value.urlToImage + "'><br><span class='title'>" + value.source.name + "</span><br><div class='news-content'><span class='article-title'>" + value.title + "</span><br><span class='description'>" + value.description + "</span></div></div></a></li>");
 		});
 
-		$('.sumoSelect').SumoSelect({
+	}
+
+	$('.sumoSelect').SumoSelect({
 			search: true,
 			placeholder: 'Select one or more sources...',
 			searchText: 'Type to Search...',
 			okCancelInMulti: true,
 			selectAll: true,
 		});
-		
-    }
 
-    getArticles();
-    });
-	</script>
+	$('.loading-message').fadeIn("slow");
+
+	setTimeout(function(){
+		$('.loading-message').fadeOut("fast");
+		getArticles();
+	}, 2000);
 	
-	<form id="newsSearch">
-		<input class="form-field-text" type="text" name="query" id="query" placeholder="Search top headlines...">
-		<select class="sumoSelect newsSourceSelect" multiple="multiple">
-			<option name="source" value="associated-press">Associated Press</option>
-			<option name="source" value="bbc-news">BBC</option>
-			<option name="source" value="cnn">CNN</option>
-			<option name="source" value="espn">ESPN</option>
-			<option name="source" value="fortune">Fortune</option>
-			<option name="source" value="fox-news">Fox News</option>
-			<option name="source" value="google-news">Google News</option>
-			<option name="source" value="the-huffington-post">The Huffington Post</option>
-			<option name="source" value="ign">IGN</option>
-			<option name="source" value="the-verge">The Verge</option>
-			<option name="source" value="the-wall-street-journal">The Wall Street Journal</option>
-			<option name="source" value="the-washington-post">The Washington Post</option>
-			<option name="source" value="time">Time</option>
-			<option name="source" value="wired">Wired</option>
-		</select>
-		<buttton onclick="javascript:void(0)" id="searchFormSubmit" class="searchFormSubmit">Search</buttton>
-	</form>
-	<a style='width:100%;text-align:right' href='https://newsapi.org' target='_blank'>Powered by News API</a>
-	<ul id="news_output"> </ul>
+	});
+	
+	</script>
+	<div class="main-container">
+		<form id="newsSearch">
+			<input class="form-field-text" type="text" name="query" id="query" placeholder="Search top headlines...">
+			<select class="sumoSelect newsSourceSelect" multiple="multiple">
+				<option name="source" value="associated-press">Associated Press</option>
+				<option name="source" value="bbc-news">BBC</option>
+				<option name="source" value="cnn">CNN</option>
+				<option name="source" value="espn">ESPN</option>
+				<option name="source" value="fortune">Fortune</option>
+				<option name="source" value="fox-news">Fox News</option>
+				<option name="source" value="google-news">Google News</option>
+				<option name="source" value="the-huffington-post">The Huffington Post</option>
+				<option name="source" value="ign">IGN</option>
+				<option name="source" value="the-verge">The Verge</option>
+				<option name="source" value="the-wall-street-journal">The Wall Street Journal</option>
+				<option name="source" value="the-washington-post">The Washington Post</option>
+				<option name="source" value="time">Time</option>
+				<option name="source" value="wired">Wired</option>
+			</select>
+			<buttton onclick="javascript:void(0)" id="searchFormSubmit" class="searchFormSubmit">Search</buttton>
+		</form>
+		<div class="the-rest-of-the-story">
+			<a style='text-align:right;margin-left:10px;font-size:80%;' href='https://newsapi.org' target='_blank'>Powered by News API</a>
+			<h1 class="loading-message">Gathering New Headlines For You...</h1>
+			<ul id="news_output"> </ul>
+		</div>
+	</div>
 </body>
+
 </html>
