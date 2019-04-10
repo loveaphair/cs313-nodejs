@@ -1,7 +1,7 @@
 const NewsAPI = require('newsapi');
 const newsapi = new NewsAPI('ae14a9ea6acf4d7d94b1e221351c1757');
 newsapi.v2.topHeadlines({
-		sources: 'bbc-news,the-verge, associated-press, cnn, espn, fortune, fox-news, google-news, the-huffington-post, the-wall-street-journal, time, wired, the-washington-post',
+		sources: 'bbc-news,the-verge, associated-press, cnn, espn, fortune, google-news, the-huffington-post, the-wall-street-journal, time, wired, the-washington-post',
 		// q: 'bitcoin',
 		// category: 'business',
 		language: 'en',
